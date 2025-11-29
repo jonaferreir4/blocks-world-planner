@@ -1,0 +1,28 @@
+venv/
+env/
+ENV/
+*.venv
+/venv
+/env
+
+__pycache__/
+*.pyc
+*.whl
+*.egg
+.pytest_cache/
+.mypy_cache/
+.nox/
+.tox/
+
+.env
+.flaskenv
+config.ini
+*.key
+*.pem
+
+.vscode/         # Pastas do VS Code (opcional, se não houver configs importantes)
+*.swp            # Arquivos swap do Vim
+
+
+.DS_Store        # macOS
+Thumbs.db        # Windows
