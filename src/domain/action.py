@@ -10,4 +10,7 @@ class Action:
         return self.preconditions.issubset(state)
     
     def apply(self, state): # Aplica a ação ao estado e retorna o novo estado
-        return (state - self.del_effects) | self.add_effects
+        S = set(state)
+        S = (S - self.del_effects) | self.add_effects
+
+        return tuple(sorted(S))

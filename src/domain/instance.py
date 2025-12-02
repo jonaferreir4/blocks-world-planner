@@ -72,9 +72,9 @@ class Instance:
                 self.initial.add(self.get_id(prop.strip()))
 
         # Completa com negativos (Closed World Assumption)
-        for prop_name, pid in self.mapping.items():
-            if pid not in {abs(x) for x in self.initial}:
-                self.initial.add(-pid)
+        # for prop_name, pid in self.mapping.items():
+        #     if pid not in {abs(x) for x in self.initial}:
+        #         self.initial.add(-pid)
 
         # 4. PROCESSAR GOAL
         for prop in goal_line.split(";"):

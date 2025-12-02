@@ -1,6 +1,6 @@
 class Node:
     def __init__(self, state, parent=None, action=None, g=0, h=0):
-        self.state = frozenset(state)
+        self.state = tuple(sorted(state)) # frozenset(state) (antigo)
         self.parent = parent
         self.action = action
         self.g = g

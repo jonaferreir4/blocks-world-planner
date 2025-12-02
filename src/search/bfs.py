@@ -1,43 +1,52 @@
+from src.domain.node  import Node
 from collections import deque
-from src.domain.node import Node
 
 def bfs(instance):
 
-    # Nó raiz
-    root = Node(instance.initial, parent=None, action=None, g=0)
-
-    # Fila FIFO
-    frontier = deque([root])
-
-    # Conjunto de visitados
     explored = set()
+    frontier = deque()
+    frontier_set = set()
+
+    start = Node(instance.initial, None, None, g=0)
+    frontier.append(start)
+    frontier_set.add(start.state)
+    
 
     num_generated = 0
 
-    goal = frozenset(instance.goal_complete)
-
     while frontier:
-        node = frontier.popleft()  # Retira da fila
+        node = frontier.popleft()
+        frontier_set.remove(node.state)
+
+        if node.state in explored:
+            continue
 
         explored.add(node.state)
 
-        # Teste de objetivo
-        if node.state == goal:
-            return node.get_path(), num_generated
+        # print(f"\n=== Estado atual === {num_generated}")
+        # for lit in sorted(node.state, key=lambda x: abs(x)):
+        #     name = instance.reverse[abs(lit)]
+            # if lit > 0:
+            #     print(f" {name}")
+            # else:
+            #     print(f" ~{name}")
 
-        # Expandir
-        for action, new_state in instance.get_successor(node.state):
-            num_generated += 1
-            new_state_frozen = frozenset(new_state)
+        # Teste de objetivo: se o estado cobre o goal completo
+        if instance.goal.issubset(node.state):
+            print("\nObjetivo alcançado!")
+            return node.get_path(), num_generated, len(explored)
 
-            if new_state_frozen not in explored:
-                child = Node(
-                    state=new_state_frozen,
-                    parent=node,
-                    action=action,
-                    g=node.g + 1,
-                    h=0
-                )
-                frontier.append(child)
+        # Expansão
+        sucessores = instance.get_successor(node.state)
+        num_generated += len(sucessores)
 
-    return None, num_generated
+        for action, successor in sucessores:
+            succ_node = Node(successor, node, action, g=node.g + action.cost)
+
+            if succ_node.state not in explored and succ_node.state not in frontier_set: # 
+                frontier.append(succ_node)
+                frontier_set.add(succ_node.state)
+
+
+    # Se não encontrou solução
+    return None, num_generated, len(explored)
