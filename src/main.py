@@ -1,62 +1,27 @@
+import sys
+from src.domain.instance import Instance
+from src.search.a_star import a_star
+from src.search.bfs import bfs
+from src.search.ids import ids
+from src.search.bidirectional_a_star import bidirectional_a_star
 
-class Instance(argv[1]):
-    def __init__(self, filename):
-        self.filename = filename
-        self.actions = []
-        self.initial = [] # Vetor de inteiros
-        self.goal = [] # Vetor de inteiros
-        self.goal_ = [] # Estado final para a busca bidirecional
-        self.mapping = {} # Dicionário str -> int
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Uso: python main.py <instancia.txt>")
+        exit(0)
 
-        def load(self):
-            # AQUI VAI A LÓGICA DE PARSEAR O ARQUIVO (STRIPS)
-            # 1. Ler o arquivo
-            # 2. Mapear strings (on_a_b) para inteiros (1, 2...) 
-            # 3. Preencher self.initial e self.goal
-            pass
+    instance = Instance(sys.argv[1])
+    instance.load()
 
+    print(f"Instância carregada: {instance.filename}")
+    print(f"Número de ações: {len(instance.actions)}")
+    print(f"ações: {[action.name for action in instance.actions]}")
 
-# Representa um nó na árvore
-class Node:
-    def __init__(self, instace, state, parent=None, action=None, cost=0):
-        self.state = state
-        self.parent = parent
-        self.action = action
-        self.g = cost
-        self.h = 0
-        self.f = 0
-
-    def __lt__(self, other):
-        return self.f < other.f
-    
-    def __eq__(self, other):
-        self.state == other.state
-    
-    def __hash__(self):
-        return hash(tuple(self.state))
-    
-def h1(node, goal_state):
-    # Exemplo: Número de proposições erradas (Distância de Hamming)
-    # Deve comparar node.state com goal_state
-    count = 0
-    # Lógica de cálculo...
-    return count
+    print(f"precondições: {[action.preconditions for action in instance.actions]}")
+    print(f"add_effects : {[action.add_effects for action in instance.actions]}")
+    print(f"del_effects : {[action.del_effects for action in instance.actions]}")
 
 
-class Solvers:
-    pass
+    print(f"ids do estado: { instance.initial }")
 
-def  iterative_deepening_dfs():
-    pass
 
-def dlf():
-    pass
-
-def bfs():
-    pass
-
-def a_star():
-    pass
-
-def bi_directional_search():
-    pass
