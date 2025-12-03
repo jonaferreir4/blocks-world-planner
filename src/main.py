@@ -9,7 +9,9 @@ from src.search.a_star import a_star
 from src.search.bfs import bfs
 from src.search.ids import ids
 from src.search.bidirectional_a_star import bidirectional_a_star
-import time 
+from src.utils.heuristics import h1, h2, h3, h4 
+import time
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -31,7 +33,9 @@ if __name__ == "__main__":
     # print(f"ids do estado: { instance.initial }")
 
     start_time = time.time()
-    plan, generated, explored = bfs(instance)
+    # plan, generated, explored = bfs(instance)
+    plan, generated, explored = a_star(instance, h4)
+
     end_time = time.time()
     if plan:
         print("Plano encontrado:")

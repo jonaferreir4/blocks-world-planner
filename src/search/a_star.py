@@ -1,35 +1,49 @@
 import heapq
 from src.domain.node import Node
-from src.utils.heuristics import h1
+from src.utils.heuristics import h0, h1, h2, h3, h4
 
-def a_star(instance):
-    initial = Node(instance.initial, None, None, 0, h1(instance.initial, instance))
-    goal_state = frozenset(instance.goal_complete)
+def a_star(instance, heuristic=h0):
+   
 
-    open_heap = []
-    heapq.heappush(open_heap, initial)
+   explored = set()
+   frontier = []
+   frontier_set = set()
+   num_generated = 0
 
-    visited = {}
+   start_state = tuple(sorted(instance.initial))
+   h0 = heuristic(start_state,instance)
 
-    expanded = 0
+   start_node = Node(start_state, None, None, g=0, h=h0)
+   heapq.heappush(frontier, (start_node.f, start_node))
+   frontier_set.add(start_node.state)
 
-    while open_heap:
-        node = heapq.heappop(open_heap)
 
-        if node.state == goal_state:
-            return expanded, node.get_path()
+   while frontier:
+      _, node = heapq.heappop(frontier)
+      frontier_set.remove(node.state)
 
-        if node.state in visited and visited[node.state] < node.g:
-            continue
+      if node.state in explored:
+         continue
+      
+      explored.add(node.state)
 
-        visited[node.state] = node.g
+      if instance.goal.issubset(node.state):
+            print("\nObjetivo alcançado!")
+            return node.get_path(), num_generated, len(explored)
+      
+      successors = instance.get_successor(node.state)
+      num_generated += len(successors)
 
-        for action, new_state in instance.get_successor(node.state):
-            g = node.g + 1
-            h = h1(new_state, instance)
-            child = Node(new_state, node, action.name, g, h)
-            heapq.heappush(open_heap, child)
 
-        expanded += 1
+      for action, succ_state in successors:
+          new_g = node.g + action.cost
+          new_h = heuristic(succ_state, instance)
 
-    return expanded, None
+          child = Node(succ_state, node, action, g=new_g, h=new_h)
+
+          if child.state not in explored and child.state not in frontier_set:
+              heapq.heappush(frontier, (child.f, child))
+              frontier_set.add(child.state)
+
+   return  None, num_generated, len(explored)
+
