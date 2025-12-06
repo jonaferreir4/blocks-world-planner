@@ -1,7 +1,7 @@
 from src.domain.node import Node
 from ..domain.stack import Stack
 
-def DLS(start_state, goal_state, limit):
+def DLS(instance, limit):
 
     def is_cycle(node):
         state = node.state
@@ -13,7 +13,8 @@ def DLS(start_state, goal_state, limit):
         return False
     
     frontier = Stack()
-    frontier.push(Node(start_state, None, None, 0, 0))
+    root = Node(instance.initial_state, None, None, 0, 0)
+    frontier.push(root)
     result = "falha"
 
     num_generated = 0
@@ -21,13 +22,13 @@ def DLS(start_state, goal_state, limit):
     while not frontier.is_empty():
         node = frontier.pop()
 
-        if node.state == goal_state:
+        if instance.is_goal(node.state):
             return node.get_path(), num_generated
         
-        if node.cost >= limit:
+        if node.g >= limit:
             result = "cutoff"
         elif not is_cycle(node):
-            for action, state in enumerate(node.state.get_successors()):
+            for action, state in instance.successors(node.state):
                 child_node = Node(state, node, action, node.g + 1, 0)
                 frontier.push(child_node)
                 num_generated += 1

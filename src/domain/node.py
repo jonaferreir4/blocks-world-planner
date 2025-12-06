@@ -15,7 +15,6 @@ class Node:
 
     def __hash__(self):
         return hash(self.state)
-    
 
     def get_path(self):
         path = []
