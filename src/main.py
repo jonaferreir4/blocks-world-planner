@@ -1,6 +1,6 @@
 """
 Equipe: Jona Ferreira de Sousa - 539700
-        Nicolas Mauricio
+        Nicolas Mauricio Chaves - 539802
 """
 
 import sys
