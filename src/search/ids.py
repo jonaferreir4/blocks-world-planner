@@ -1,9 +1,16 @@
 from src.search.dls import dls
 
-def ids(instance, limit_start=0):
-    limit = limit_start
+def ids(instance):
+    max_depth = 30
+    total_generated = 0
+
     while True:
-        found, expanded, node = dls(instance, limit)
-        if found:
-            return expanded, node.get_path()
-        limit += 1
+        result, generated = dls(instance, max_depth)
+        total_generated += generated
+
+        if result != "cutoff":
+            print(f"Profundidade atingida: {max_depth}")
+            return result, total_generated, None
+        elif result == "falha":
+            return None, total_generated, None
+        depth += 1
